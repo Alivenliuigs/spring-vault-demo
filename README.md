@@ -1,9 +1,9 @@
 
-###启动 vault
+###Start vault
 ```angular2html
  docker run -p 8200:8200 -e 'VAULT_DEV_ROOT_TOKEN_ID=dev-only-token' vault
 ```
-##生成证书
+##Generate certificate.
 ```angular2html
 [root@es-sky-131 tls]# cat test.cnf
 [ req ]
@@ -27,18 +27,18 @@ openssl genrsa -out server.key 2048
 openssl req -new -key server.key -config test.cnf -subj "/CN=Vault" -out server.csr
 openssl x509 -req -in server.csr -CA /opt/vault/tls/ca.crt -CAkey /opt/vault/tls/ca.key -CAcreateserial -days 36500 -extensions v3_req -extfile test.cnf -out server.crt
 ```
-### 生成jks证书
+### Generate JKS certificate.
 ```angular2html
 $ keytool -importcert -keystore keystore.jks -file server.crt -noprompt -storepass changeit -alias <domain>
 ```
 ## Secert KV Demo
-###在docker进程中执行
+###Execute in the Docker process.
 ```angular2html
-http命令行设置
+HTTP Protocol command line settings.
 $ export VAULT_TOKEN="00000000-0000-0000-0000-000000000000"
 $ export VAULT_ADDR="http://127.0.0.1:8200"
 
-https 命令行设置
+HTTPS Protocol command line settings.
 cp /opt/vault/tls/ca.* /etc/ssl/certs/
 $ export VAULT_ADDR="https://127.0.0.1:8200"
 $ VAULT_SSL=/opt/vault/tls
@@ -48,9 +48,9 @@ $ vault kv put secret/gs-vault-config example.username=demouser example.password
 
     $ vault kv put kv/certfication cert=@server.crt key=@server.key
 ```
-执行代码SecertApplication
 
-## 动态数据库凭据 Database Demo
+## Dynamic database credentials. Database Demo.
+
 ```angular2html
 --
 -- Sample schema for testing vault database secrets
@@ -76,15 +76,15 @@ flush privileges;
 $ vault secrets enable database
 $ vault write database/config/fakebank plugin_name=mysql-legacy-database-plugin connection_url="{{username}}:{{password}}@tcp(192.168.0.40:43306)/fakebank" allowed_roles="*" username="fakebank-admin" password="Sup&rSecre7!"
 ```
-Vault数据库角色设置，授予对fakebank模式的所有表的只读访问权限：
+Vault database role settings, granting read-only access to all tables in the fakebank schema.
 ```
 $ vault write database/roles/fakebank-accounts-ro db_name=fakebank creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON fakebank.* TO '{{name}}'@'%';"
 ```
-创建动态凭据
+Create dynamic credentials.
 ```angular2html
 $ vault read database/creds/fakebank-accounts-ro
 ```
-### Transit 加解密数据
+### Transit encrypts and decrypts data.
 ```angular2html
 $ vault kv put kv/github github.oauth2.key=foobar
 ```
