@@ -1,0 +1,30 @@
+spring:
+    application:
+      name: cloud-vault
+    datasource:
+      url: jdbc:mysql://192.168.0.40:43306/fakebank
+#      url: jdbc:oracle:thin:@//192.168.0.41:1521/XE
+
+spring.cloud.vault:
+  host: localhost
+  port: 8200
+  scheme: http
+  fail-fast: true
+  connection-timeout: 5000
+  read-timeout: 15000
+  config:
+    spring.config.import: vault://
+  authentication: token
+  token: hvs.WVP0lrcUYXE285tffCHXoINJ
+  kv:
+    enabled: true
+    backend: kv
+    profile-separator: /
+    application-name: gs-vault-config
+  database:
+    enabled: true
+    role: fakebank-accounts-ro
+    backend: database
+    username-property: spring.datasource.username
+    password-property: spring.datasource.password
+
