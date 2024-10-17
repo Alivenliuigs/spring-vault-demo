@@ -1,9 +1,9 @@
 
-###Start vault
+### Start vault
 ```angular2html
  docker run -p 8200:8200 -e 'VAULT_DEV_ROOT_TOKEN_ID=dev-only-token' vault
 ```
-##Generate certificate.
+## Generate certificate.
 ```angular2html
 [root@es-sky-131 tls]# cat test.cnf
 [ req ]
